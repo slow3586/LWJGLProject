@@ -21,6 +21,7 @@ public class VertexArrayPTNI extends VertexArrayPNI {
     public VertexArrayPTNI(float[] p, float[] t, float[] n, int[] i) {
         super();
         setPosBuf(p);
+        setTexBuf(t);
         setNorBuf(n);
         setIndBuf(i);
     }
@@ -30,7 +31,7 @@ public class VertexArrayPTNI extends VertexArrayPNI {
         texBuf = new VertexBuffer(GL_ARRAY_BUFFER, array.length);
         texBuf.bind();
         glBufferData(GL_ARRAY_BUFFER, BufHelp.toBuffer(array), GL_STATIC_DRAW);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, false, 0, 0);
     }
 }

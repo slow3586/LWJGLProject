@@ -28,7 +28,7 @@ public class VertexArrayPNI extends VertexArrayPI {
         norBuf = new VertexBuffer(GL_ARRAY_BUFFER, array.length);
         norBuf.bind();
         glBufferData(GL_ARRAY_BUFFER, BufHelp.toBuffer(array), GL_STATIC_DRAW);
-        glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
     }
 }

@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import javax.imageio.ImageIO;
+import lwjglproject.BufHelp;
+import lwjglproject.entities.gui.FullscreenImage;
 import org.joml.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
@@ -19,10 +21,10 @@ final public class Texture {
     public Vector2i size = null;
     
     private Texture(){
-        glGenTextures(id);
+        id.put(glGenTextures());
         glBindTexture(GL_TEXTURE_2D, id.get(0));
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
@@ -39,7 +41,7 @@ final public class Texture {
         t.copyData(this);
     }
     
-    /*
+
     public void setAsFullscreenImage(){
         FullscreenImage.texture = this;
     }
@@ -47,12 +49,11 @@ final public class Texture {
     public static Texture createDepthTexture(Vector2i size){
         Texture t = new Texture();
         t.size = size;
-        gl.glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-        gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
-        gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         return t;
-    }
-*/    
+    }   
 
     public static Texture fromFile(File file){
         try {
@@ -70,8 +71,7 @@ final public class Texture {
         byte[] data = new byte[w*h*4];
         for (int x = 0; x < h; x++) {
             for (int y = 0; y < w; y++) {
-                //Color c = new Color(img.getRGB(y, h-x-1), true);
-                Color c = new Color(img.getRGB(y, x), true);
+                Color c = new Color(img.getRGB(y, h-x-1), true);
                 data[0 + y*4 + x*w*4] = (byte)c.getRed();
                 data[1 + y*4 + x*w*4] = (byte)c.getGreen();
                 data[2 + y*4 + x*w*4] = (byte)c.getBlue();
@@ -119,10 +119,9 @@ final public class Texture {
         bind();
         this.size = size;
         if(data == null){
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, (ByteBuffer)null);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, (ByteBuffer)null);
         } else {
-            ByteBuffer b = ByteBuffer.wrap(data);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, b);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, BufHelp.toBuffer(data));
         }
     }
     

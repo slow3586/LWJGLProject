@@ -24,7 +24,10 @@ public class App {
     public static int h = 480;
     public static App ins = new App();
     public static boolean close = false;
-    public static double lasttime;
+    public static double lastFrameTime;
+    public static float fpsRequired = 60;
+    public static float delta = 0;
+    public static float fps = 0;
 
     public static void main(String[] args) {
             App.ins.run();
@@ -90,7 +93,7 @@ public class App {
                     );
             }
             glfwMakeContextCurrent(window);
-            glfwSwapInterval(1);
+            //glfwSwapInterval(1);
 
             glfwShowWindow(window);
             GL.createCapabilities();
@@ -117,13 +120,17 @@ public class App {
         Mouse.reset();
         glfwPollEvents();
 
-        while (glfwGetTime() < lasttime + 1.0/60) {
+        double nextFrameTime = lastFrameTime + 1.0f/fpsRequired;
+        double currentFrameTime = glfwGetTime();
+        if(currentFrameTime < nextFrameTime){
             try {
-                Thread.sleep(1);
+                Thread.sleep((long) ((nextFrameTime - currentFrameTime)*1000.0));
             } catch (InterruptedException ex) {
                 Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        lasttime += 1.0/60;
+        delta = (float) (glfwGetTime() - lastFrameTime);
+        fps = 1/delta;
+        lastFrameTime = glfwGetTime();
     }
 }

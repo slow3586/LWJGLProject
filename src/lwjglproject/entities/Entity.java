@@ -27,7 +27,7 @@ public class Entity extends Node {
         this.addAll(MeshParser.meshFromFile(mesh, false));
         if(this.children.isEmpty()) throw new IllegalArgumentException("Mesh file has no mesh data!");
     } 
-    
+    */
     public void forEachMesh(Consumer<Mesh> run){
         for (Node node : children) {
             if (node instanceof Mesh) {
@@ -40,7 +40,6 @@ public class Entity extends Node {
             }
         }
     }
-    */
     
     final public void updateVectors(){
         if(parent!=null){
