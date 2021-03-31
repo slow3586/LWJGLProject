@@ -13,8 +13,8 @@ public class Panel extends Node {
     public Panel(Panel parent) {
         if(parent!=null)
             parent.add(this);
-        else if(Gui.root != null){
-            Gui.root.add(this);
+        else{
+            Gui.ins.add(this);
         }
     }
 
@@ -97,7 +97,12 @@ public class Panel extends Node {
     
     public void updateRects(){
         if(parent!=null){
-            posG = new Vector2i(posL).add(((Panel)parent).posG);
+            if(parent instanceof Panel)
+                posG = new Vector2i(posL).add(((Panel)parent).posG);
+            else{
+                Entity p = (Entity)parent;
+                posG = new Vector2i(posL).add(new Vector2i((int)p.posG.x, (int)p.posG.y));
+            }
         } else {
             posG = posL;
         }

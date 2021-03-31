@@ -40,10 +40,10 @@ public class Node {
         children.clear();
     }
     
-    public void draw(){
+    public void draw(Camera cam){
         if(!visible)return;
         children.forEach((t) -> {
-            t.draw();
+            t.draw(cam);
         });
     }
     

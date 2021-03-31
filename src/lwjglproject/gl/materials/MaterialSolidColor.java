@@ -7,14 +7,12 @@ import org.joml.Vector4f;
 
 public class MaterialSolidColor extends Material {
     public Vector4f color=new Vector4f(1.0f,0.0f,0.0f,1.0f);
-    public Camera cam = Camera.main;
 
     public MaterialSolidColor() {
     }
 
-    public MaterialSolidColor(Vector4f color, Camera cam) {
+    public MaterialSolidColor(Vector4f color) {
         this.color = color;
-        this.cam = cam;
     }
 
     @Override

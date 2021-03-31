@@ -4,6 +4,7 @@ import lwjglproject.gl.vertexarrays.VertexArray;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import lwjglproject.entities.Camera;
+import lwjglproject.entities.Entity;
 import lwjglproject.entities.Mesh;
 import lwjglproject.gl.materials.Material;
 import lwjglproject.gl.materials.MaterialSolidColor;
@@ -27,9 +28,9 @@ final public class SPSolidColor extends ShaderProgram {
         uCameraEntityMat = getUniformPos("cameraEntityMat");
     };  
 
-    public void draw(Mesh mesh, VertexArray varr, Material mat){
+    public void draw(Camera cam, Entity ent, VertexArray varr, Material mat){
         MaterialSolidColor m = (MaterialSolidColor)mat;
-        draw(m.cam.mat, mesh.mat, m.color, varr);
+        draw(cam.mat, ent.mat, m.color, varr);
     }
     
     public static void draw(Matrix4f camMat, Matrix4f entMat, Vector4f color, VertexArray varr) {

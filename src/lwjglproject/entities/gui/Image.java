@@ -16,19 +16,21 @@ public class Image extends Panel {
     }
 
     @Override
-    public void draw() {
+    public void draw(Camera cam) {
         if (!visible) return;
         
-        SPTexture.draw(Gui.cam.mat, mat, texture, panelVA);
+        SPTexture.draw(cam.mat, mat, texture, panelVA);
             
         children.forEach((t) -> {
-            ((Panel) t).draw();
+            ((Panel) t).draw(cam);
         });
     }
     
     public void setTexture(Texture t){
+        if(t==null) return;
         texture = t;
         size = new Vector2i(t.size);
+        updateMatrix();
     }
     
     public Texture getTexture(){

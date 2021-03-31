@@ -6,6 +6,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import lwjglproject.entities.Camera;
+import lwjglproject.entities.Entity;
 import lwjglproject.entities.Mesh;
 import lwjglproject.gl.Texture;
 import lwjglproject.gl.materials.Material;
@@ -38,7 +39,7 @@ final public class SPMatcap extends ShaderProgram {
         uCamPos = getUniformPos("camPos");
     };  
     
-    public void draw(Mesh mesh, VertexArray varr, Material mat){
+    public void draw(Camera cam, Entity ent, VertexArray varr, Material mat){
         //draw((Camera)params.get("camera"), mesh.mat, (Texture)params.get("matcapTexture"), varr);
     }
     

@@ -1,10 +1,12 @@
 package lwjglproject.scenes;
 
+import lwjglproject.entities.Camera;
 import lwjglproject.entities.Entity;
+import lwjglproject.entities.World;
 
 public abstract class Scene {
     private static Scene current=null;
-    public Entity root = new Entity(null);
+    public World root = new World(Camera.cam3D());
     abstract public void start();
     abstract public void update();
     abstract public void reshape();
@@ -16,6 +18,10 @@ public abstract class Scene {
         }
         current = s;
         current.start();
+    }
+    
+    public static boolean isNull(){
+        return current==null;
     }
     
     public static Scene getCurrent(){

@@ -14,17 +14,17 @@ public abstract class ButtonRect extends Button {
     }
 
     @Override
-    public void draw(){
+    public void draw(Camera cam){
         if (!visible) return;
         
         if(isMouseOver && !isDown){
-            SPSolidColor.draw(Gui.cam.mat, mat, colorActive, PanelRect.panelVA);
+            SPSolidColor.draw(cam.mat, mat, colorActive, PanelRect.panelVA);
         } else {
-            SPSolidColor.draw(Gui.cam.mat, mat, color, PanelRect.panelVA);
+            SPSolidColor.draw(cam.mat, mat, color, PanelRect.panelVA);
         }
             
         children.forEach((t) -> {
-            ((Panel) t).draw();
+            ((Panel) t).draw(cam);
         });
     }
 }

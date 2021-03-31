@@ -1,18 +1,16 @@
 package lwjglproject;
 
-import lwjglproject.scenes.SceneTest;
-import lwjglproject.scenes.Scene;
+import lwjglproject.scenes.*;
 import java.nio.IntBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
+import lwjglproject.entities.gui.Gui;
 import org.lwjgl.Version;
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL14.GL_FUNC_ADD;
-import static org.lwjgl.opengl.GL14.glBlendEquation;
+import static org.lwjgl.opengl.GL14.*;
 import org.lwjgl.system.MemoryStack;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -20,6 +18,8 @@ import sun.awt.DisplayChangedListener;
 
 public class App {
     private long window;
+    public static int x = 0;
+    public static int y = 0;
     public static int w = 640;
     public static int h = 480;
     public static App ins = new App();
@@ -56,7 +56,7 @@ public class App {
 
             glfwDefaultWindowHints();
             glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-            glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+            //glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
             window = glfwCreateWindow(w, h, "Hello World!", NULL, NULL);
             if ( window == NULL )
@@ -77,7 +77,19 @@ public class App {
             glfwSetCursorEnterCallback(window, (window, entered) -> {
                 Mouse.onMouseEnter(window, entered);
             });
-
+            
+            glfwSetWindowPosCallback(window, (window, xpos, ypos) -> {
+                App.x = xpos;
+                App.y = ypos;
+            });
+            glfwSetWindowContentScaleCallback(window, (window, xscale, yscale) -> {
+            });
+            glfwSetWindowSizeCallback(window, (window, width, height) -> {
+                App.w = width;
+                App.h = height;
+                reshape();
+            });
+                    
             try ( MemoryStack stack = stackPush() ) {
                     IntBuffer pWidth = stack.mallocInt(1);
                     IntBuffer pHeight = stack.mallocInt(1);
@@ -110,15 +122,30 @@ public class App {
             glEnable(GL_DEPTH_TEST);
             Scene.setScene(SceneTest.ins);
     }
+    
+    private void reshape(){
+        if(!Scene.isNull())
+            Scene.getCurrent().reshape();
+        Gui.ins.reshape();
+    }
 
     private void loop() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        Scene.getCurrent().update();
 
-        glfwSwapBuffers(window);
         Keyboard.reset();
         Mouse.reset();
         glfwPollEvents();
+        
+        Gui.ins.update();
+        Scene.getCurrent().update();
+        //glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        Scene.getCurrent().root.draw();
+        //glDisable(GL_DEPTH_TEST);
+        glDisable(GL_CULL_FACE);
+        Gui.ins.draw();
+        
+        glfwSwapBuffers(window);
 
         double nextFrameTime = lastFrameTime + 1.0f/fpsRequired;
         double currentFrameTime = glfwGetTime();

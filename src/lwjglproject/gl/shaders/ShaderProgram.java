@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
+import lwjglproject.entities.Camera;
+import lwjglproject.entities.Entity;
 import lwjglproject.entities.Mesh;
 import lwjglproject.gl.materials.Material;
 import org.lwjgl.opengl.*;
@@ -30,7 +33,7 @@ public abstract class ShaderProgram {
      */
     protected static ShaderProgram current;
     
-    abstract public void draw(Mesh mesh, VertexArray varr, Material mat);
+    abstract public void draw(Camera cam, Entity ent, VertexArray varr, Material mat);
     
     /**
      * Reads the text file resource and adds it to the shader program as shader code.

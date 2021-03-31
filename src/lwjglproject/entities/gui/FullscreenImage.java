@@ -13,14 +13,14 @@ public class FullscreenImage extends Panel {
     public static Texture texture = null;
     
     private FullscreenImage() {
-        super(Gui.root);
+        super(null);
     }
 
     @Override
-    public void draw() {
+    public void draw(Camera cam) {
         if(!visible) return;
         if(texture!=null){
-            SPTexture.draw(Gui.cam.mat, mat, texture, panelVA);
+            SPTexture.draw(cam.mat, mat, texture, panelVA);
             //SPSolidColor.draw(Gui.cam.mat, mat, new Vector4f(1,0,0,1), panelVA);
         }
     }

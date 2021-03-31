@@ -1,7 +1,11 @@
 package lwjglproject.gl.shaders;
 
+import com.sun.istack.internal.NotNull;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
+import java.util.Objects;
+import lwjglproject.entities.Camera;
+import lwjglproject.entities.Entity;
 import lwjglproject.entities.Mesh;
 import lwjglproject.gl.Texture;
 import lwjglproject.gl.materials.Material;
@@ -45,8 +49,8 @@ final public class SPTexture extends ShaderProgram {
     }
 
     @Override
-    public void draw(Mesh mesh, VertexArray varr, Material mat) {
+    public void draw(Camera cam, Entity ent, VertexArray varr, Material mat) {
         MaterialTexture m = (MaterialTexture)mat;
-        draw(m.cam.mat, mesh.mat, m.tex, varr);
+        draw(cam.mat, ent.mat, m.tex, varr);
     }
 }

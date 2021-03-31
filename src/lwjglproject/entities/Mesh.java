@@ -21,16 +21,16 @@ public class Mesh extends Entity {
     }
     
     @Override
-    public void draw() {
+    public void draw(Camera cam) {
         if(!visible) return;
         for(MeshPart part : meshParts){
-            part.material.getShader().draw(this, part.vertexArray, part.material);
+            part.material.getShader().draw(cam, this, part.vertexArray, part.material);
         }
         
         if(children.isEmpty()) return;
         
         children.forEach((t) -> {
-            ((Entity)t).draw();
+            ((Entity)t).draw(cam);
         });
     }    
 }

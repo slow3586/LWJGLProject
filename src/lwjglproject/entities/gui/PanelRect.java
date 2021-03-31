@@ -16,13 +16,13 @@ public class PanelRect extends Panel {
     }
     
     @Override
-    public void draw(){
+    public void draw(Camera cam){
         if (!visible) return;
         
-        SPSolidColor.draw(Gui.cam.mat, mat, color, panelVA);
+        SPSolidColor.draw(cam.mat, mat, color, panelVA);
             
         children.forEach((t) -> {
-            ((Panel) t).draw();
+            ((Panel) t).draw(cam);
         });
     }
 

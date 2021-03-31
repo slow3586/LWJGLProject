@@ -9,14 +9,12 @@ import org.joml.Vector4f;
 public class MaterialTexture extends Material {
     
     public Texture tex;
-    public Camera cam;
     
     public MaterialTexture() {
     }
 
-    public MaterialTexture(Texture texture, Camera cam) {
+    public MaterialTexture(Texture texture) {
         this.tex = texture;
-        this.cam = cam;
     }
 
     @Override

@@ -22,8 +22,6 @@ public class Camera extends Entity{
     public static final Vector3f right3D = new Vector3f(1,0,0);
     public static final Vector3f left3D = new Vector3f(-1,0,0);
     
-    public static Camera main = Camera.cam3D();
-    
     public Vector3f up;
     public Vector3f down;
     public Vector3f left;
