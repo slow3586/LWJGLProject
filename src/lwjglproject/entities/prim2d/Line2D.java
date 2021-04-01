@@ -1,8 +1,11 @@
-package lwjglproject.entities;
+package lwjglproject.entities.prim2d;
 
 import java.util.ArrayList;
+import lwjglproject.entities.Camera;
+import lwjglproject.entities.Entity;
 import lwjglproject.gl.materials.Material;
 import lwjglproject.gl.shaders.SPSolidColor;
+import lwjglproject.gl.shaders.SPVertexColor;
 import lwjglproject.gl.vertexarrays.VertexArray;
 import lwjglproject.gl.vertexarrays.VertexArrayPIC;
 import org.joml.Matrix2f;
@@ -10,9 +13,9 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-public class LineGen extends Entity {
+public class Line2D extends Entity {
 
-    public LineGen(Entity parent) {
+    public Line2D(Entity parent) {
         super(parent);
     }
     
@@ -42,7 +45,7 @@ public class LineGen extends Entity {
             needsRender = false;
         }
         
-        SPSolidColor.draw(cam.mat, this.mat, new Vector4f(1,0,0,1), vertexArray);
+        SPVertexColor.draw(cam.getMat(), this.getMat(), vertexArray);
         
         if(children.isEmpty()) return;
         
@@ -54,60 +57,66 @@ public class LineGen extends Entity {
     private void render(){
         if(points.size()<2) return;
         
-        LinePoint prevPoint = null;
+        ArrayList<LinePoint> newPoints = new ArrayList<>(points);
+        if(loops)
+            newPoints.add(newPoints.get(0));
+        
         ArrayList<Vector2f> verts = new ArrayList<>();
-        if(loops){
-            points.add(points.get(0));
-        }
-        for (LinePoint currPoint : points) {
+        ArrayList<Vector4f> colors = new ArrayList<>();
+        LinePoint prevPoint = null;
+        Matrix2f rotCW = new Matrix2f().rotation((float) Math.toRadians(90));
+        Matrix2f rotCCW = new Matrix2f().rotation((float) Math.toRadians(-90));
+        for (int i = 0; i < newPoints.size(); i++) {
+            LinePoint currPoint = newPoints.get(i);
             if(prevPoint==null){
                 prevPoint = currPoint;
                 continue;
             }
             
             Vector2f vecDir = new Vector2f(currPoint.pos).sub(prevPoint.pos).normalize();
-            Matrix2f rotCW = new Matrix2f().rotation((float) Math.toRadians(90));
-            Matrix2f rotCCW = new Matrix2f().rotation((float) Math.toRadians(-90));
-            Vector2f v0new = new Vector2f(prevPoint.pos)
-                    .add(new Vector2f(vecDir).mul(prevPoint.size));
+            Vector2f v0new = new Vector2f(prevPoint.pos);
+            if(i==1 && !loops){ //extend first point back
+                v0new.add(new Vector2f(vecDir).mul(prevPoint.size));
+            }else{
+                v0new.sub(new Vector2f(vecDir).mul(prevPoint.size));
+            }
             verts.add(
                     new Vector2f(v0new)
                             .add(new Vector2f(vecDir).mul(rotCW).mul(prevPoint.size)) 
             );
+            colors.add(prevPoint.color);
             verts.add(
                     new Vector2f(v0new)
                             .add(new Vector2f(vecDir).mul(rotCCW).mul(prevPoint.size)) 
             );
+            colors.add(prevPoint.color);
             
-            Vector2f v1new = new Vector2f(currPoint.pos)
-                    .sub(new Vector2f(vecDir).mul(currPoint.size));
+            Vector2f v1new = new Vector2f(currPoint.pos);
+            if(i==newPoints.size()-1 && !loops){
+                v1new.sub(new Vector2f(vecDir).mul(currPoint.size));
+            }else{
+                v1new.add(new Vector2f(vecDir).mul(currPoint.size));
+            }
             verts.add(
                     new Vector2f(v1new)
                             .add(new Vector2f(vecDir).mul(rotCW).mul(currPoint.size)) 
             );
+            colors.add(currPoint.color);
             verts.add(
                     new Vector2f(v1new)
                             .add(new Vector2f(vecDir).mul(rotCCW).mul(currPoint.size)) 
             );
+            colors.add(currPoint.color);
             
             prevPoint = currPoint;
-        }
+        }        
+        vertexArray.setPosBuf(verts, 0);
         
-        
-        float[] posArr = new float[verts.size()*3];
-        for (int i = 0; i < verts.size(); i++) {
-            Vector2f v = verts.get(i);
-            posArr[i*3] = v.x;
-            posArr[i*3+1] = v.y;
-            posArr[i*3+2] = 0;
-        }
-        vertexArray.setPosBuf(posArr);
-        
-        int indArraySize = (points.size()*2-3)*6;
+        int indArraySize = (newPoints.size()*2-3)*6;
         if(loops)
             indArraySize +=6;
         int[] indArr = new int[indArraySize];
-        for (int i = 0; i < points.size()*2-3; i++) {
+        for (int i = 0; i < newPoints.size()*2-3; i++) {
             indArr[i*6] = i*2;
             indArr[i*6+1] = i*2+1;
             indArr[i*6+2] = i*2+2;
@@ -116,7 +125,7 @@ public class LineGen extends Entity {
             indArr[i*6+5] = i*2+3;
         }
         if(loops){
-            int i = (points.size()*2-3);
+            int i = (newPoints.size()*2-3);
             indArr[i*6] = i*2;
             indArr[i*6+1] = i*2+1;
             indArr[i*6+2] = 0;
@@ -126,15 +135,6 @@ public class LineGen extends Entity {
         }
         vertexArray.setIndBuf(indArr);
         
-        Vector4f[] colorArr = new Vector4f[points.size()*2];
-        for (int i = 0; i < points.size(); i++) {
-            colorArr[i*2]=points.get(i).color;
-            colorArr[i*2+1]=points.get(i).color;
-        }
-        vertexArray.setVertexColorBuf(colorArr);
-        
-        if(loops){
-            points.remove(points.size()-1);
-        }
+        vertexArray.setVertexColorBuf(colors);
     }
 }

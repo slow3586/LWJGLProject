@@ -19,11 +19,9 @@ public class Image extends Panel {
     public void draw(Camera cam) {
         if (!visible) return;
         
-        SPTexture.draw(cam.mat, mat, texture, panelVA);
+        SPTexture.draw(cam.getMat(), mat, texture, panelVA);
             
-        children.forEach((t) -> {
-            ((Panel) t).draw(cam);
-        });
+        drawChildren(cam);
     }
     
     public void setTexture(Texture t){

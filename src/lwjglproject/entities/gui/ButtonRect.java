@@ -18,9 +18,9 @@ public abstract class ButtonRect extends Button {
         if (!visible) return;
         
         if(isMouseOver && !isDown){
-            SPSolidColor.draw(cam.mat, mat, colorActive, PanelRect.panelVA);
+            SPSolidColor.draw(cam.getMat(), mat, colorActive, PanelRect.panelVA);
         } else {
-            SPSolidColor.draw(cam.mat, mat, color, PanelRect.panelVA);
+            SPSolidColor.draw(cam.getMat(), mat, color, PanelRect.panelVA);
         }
             
         children.forEach((t) -> {

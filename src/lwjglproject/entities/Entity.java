@@ -7,13 +7,14 @@ import org.joml.*;
 
 public class Entity extends Node {
     public String name = "Entity";
-    public Vector3f posG = new Vector3f();
-    public Vector3f rotG = new Vector3f();
-    public Vector3f scaleG = new Vector3f(1,1,1);
-    public Vector3f posL = new Vector3f();
-    public Vector3f rotL = new Vector3f();
-    public Vector3f scaleL = new Vector3f(1,1,1);
-    public Matrix4f mat = new Matrix4f();
+    private Vector3f posG = new Vector3f();
+    private Vector3f rotG = new Vector3f();
+    private Vector3f scaleG = new Vector3f(1,1,1);
+    private Vector3f posL = new Vector3f();
+    private Vector3f rotL = new Vector3f();
+    private Vector3f scaleL = new Vector3f(1,1,1);
+    private Matrix4f mat = new Matrix4f();
+    private boolean needsUpdate = false;
 
     public Entity() {
     }
@@ -41,18 +42,41 @@ public class Entity extends Node {
         }
     }
     
-    final public void updateVectors(){
+    @Override
+    public void draw(Camera cam){
+        if(!visible)return;
+        
+        drawChildren(cam);
+    }
+    
+    @Override
+    public void update(){
+        if (!visible) return; 
+
+        checkUpdate();
+        
+        updateChildren();
+    }
+    
+    protected void checkUpdate(){
+        if(needsUpdate){
+            updateMatrix();
+            needsUpdate = false;
+        }
+    }
+    
+    final protected void updateVectors(){
         if(parent!=null){
             if(parent instanceof Entity){
                 Entity parent = (Entity) this.parent;
-                posG = new Vector3f(parent.posG).add(new Vector3f(posL).mul(parent.scaleG));
-                rotG = new Vector3f(parent.rotG).add(rotL);
-                scaleG = new Vector3f(parent.scaleG).add(scaleL).sub(new Vector3f(1,1,1));
+                posG=new Vector3f(parent.getPosG()).add(new Vector3f(getPosL()).mul(parent.getScaleG()));
+                rotG=new Vector3f(parent.getRotG()).add(getRotL());
+                scaleG=(new Vector3f(parent.getScaleG()).add(getScaleL()).sub(new Vector3f(1,1,1)));
             }
         } else {
-            posG = posL;
-            rotG = rotL;
-            scaleG = scaleL;
+            posG=getPosL();
+            rotG=getRotL();
+            scaleG=getScaleL();
         }
     }
     
@@ -62,13 +86,61 @@ public class Entity extends Node {
     public void updateMatrix(){
         updateVectors();
         
-        mat.identity();
-        mat.translate(posG);
-        mat.rotateZYX(rotG);
-        mat.scale(scaleG);
-        
+        getMat().identity();
+        getMat().translate(getPosG());
+        getMat().rotateZYX(getRotG());
+        getMat().scale(getScaleG());
+    }
+    
+    public void requestUpdate(){
+        needsUpdate = true;
         children.forEach((t) -> {
-            ((Entity) t).updateMatrix();
+            if(t instanceof Entity){
+                ((Entity) t).needsUpdate = true;
+            }
         });
+    }
+
+    public Vector3f getPosG() {
+        return posG;
+    }
+
+    public Vector3f getRotG() {
+        return rotG;
+    }
+
+    public Vector3f getScaleG() {
+        return scaleG;
+    }
+
+    public Vector3f getPosL() {
+        return posL;
+    }
+
+    public void setPosL(Vector3f posL) {
+        this.posL = posL;
+        requestUpdate();
+    }
+
+    public Vector3f getRotL() {
+        return rotL;
+    }
+
+    public void setRotL(Vector3f rotL) {
+        this.rotL = rotL;
+        requestUpdate();
+    }
+
+    public Vector3f getScaleL() {
+        return scaleL;
+    }
+
+    public void setScaleL(Vector3f scaleL) {
+        this.scaleL = scaleL;
+        requestUpdate();
+    }
+
+    public Matrix4f getMat() {
+        return mat;
     }
 }

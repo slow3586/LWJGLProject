@@ -1,7 +1,7 @@
 package lwjglproject.entities.gui;
 
 import lwjglproject.entities.*;
-import lwjglproject.entities.primitives.Plane;
+import lwjglproject.entities.prim3d.Plane;
 import lwjglproject.gl.*;
 import lwjglproject.gl.shaders.SPSolidColor;
 import lwjglproject.gl.vertexarrays.*;
@@ -19,7 +19,7 @@ public class PanelRect extends Panel {
     public void draw(Camera cam){
         if (!visible) return;
         
-        SPSolidColor.draw(cam.mat, mat, color, panelVA);
+        SPSolidColor.draw(cam.getMat(), mat, color, panelVA);
             
         children.forEach((t) -> {
             ((Panel) t).draw(cam);

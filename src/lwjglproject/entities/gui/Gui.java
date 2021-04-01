@@ -24,7 +24,7 @@ public final class Gui extends World {
     }
     
     public void reshape(){
-        camera.posL.y = -App.h;
+        camera.setPosL(camera.getPosL().setComponent(1, -App.h));
         camera.orthoLeftBottom(1);
         
         FullscreenImage.ins.size = new Vector2i(App.w, App.h);

@@ -2,10 +2,12 @@ package lwjglproject.gl.vertexarrays;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import lwjglproject.BufHelp;
 import lwjglproject.BufHelp;
 import lwjglproject.gl.VertexBuffer;
+import org.joml.*;
 import org.lwjgl.BufferUtils;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -23,6 +25,28 @@ public class VertexArrayPI extends VertexArray {
         super();
         setPosBuf(p);
         setIndBuf(i);
+    }
+    
+    public void setPosBuf(ArrayList<Vector2f> list, float z){
+        float[] posArr = new float[list.size()*3];
+        for (int i = 0; i < list.size(); i++) {
+            Vector2f v = list.get(i);
+            posArr[i*3] = v.x;
+            posArr[i*3+1] = v.y;
+            posArr[i*3+2] = z;
+        }
+        setPosBuf(posArr);
+    }
+    
+    public void setPosBuf(ArrayList<Vector3f> list){
+        float[] posArr = new float[list.size()*3];
+        for (int i = 0; i < list.size(); i++) {
+            Vector3f v = list.get(i);
+            posArr[i*3] = v.x;
+            posArr[i*3+1] = v.y;
+            posArr[i*3+2] = 0;
+        }
+        setPosBuf(posArr);
     }
     
     public void setPosBuf(float[] array){

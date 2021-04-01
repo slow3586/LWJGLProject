@@ -46,7 +46,7 @@ final public class SPMatcap extends ShaderProgram {
     public static void draw(Camera camera, Matrix4f entMat, Texture matcap, VertexArray varr) {
         ins.use();
         
-        glUniform3f(uCamPos, camera.posL.x, camera.posL.y, camera.posL.z);
+        glUniform3f(uCamPos, camera.getPosL().x, camera.getPosL().y, camera.getPosL().z);
         float[] temp = new float[16];
         glUniformMatrix4fv(uModelMat, false, entMat.get(temp));
         glUniformMatrix4fv(uViewMat, false, camera.view.get(temp));

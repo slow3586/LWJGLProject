@@ -27,10 +27,6 @@ public class Mesh extends Entity {
             part.material.getShader().draw(cam, this, part.vertexArray, part.material);
         }
         
-        if(children.isEmpty()) return;
-        
-        children.forEach((t) -> {
-            ((Entity)t).draw(cam);
-        });
+        drawChildren(cam);
     }    
 }

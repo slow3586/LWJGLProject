@@ -40,18 +40,27 @@ public class Node {
         children.clear();
     }
     
-    public void draw(Camera cam){
-        if(!visible)return;
+    public void drawChildren(Camera cam){
         children.forEach((t) -> {
             t.draw(cam);
+        });
+    }
+    
+    public void draw(Camera cam){
+        if(!visible)return;
+        
+        drawChildren(cam);
+    }
+    
+    public void updateChildren(){
+        children.forEach((t) -> {
+            t.update();
         });
     }
     
     public void update(){
         if (!visible) return;  
         
-        children.forEach((t) -> {
-            t.update();
-        });
+        updateChildren();
     }
 }

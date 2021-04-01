@@ -1,4 +1,4 @@
-package lwjglproject.entities.primitives;
+package lwjglproject.entities.prim3d;
 
 import lwjglproject.entities.Entity;
 import lwjglproject.entities.Mesh;
@@ -84,18 +84,12 @@ public class Plane extends Mesh {
     public void updateMatrix(){
         updateVectors();
         
-        mat.identity();
-        mat.translate(posG);
-        mat.rotateLocalZ(rotG.z);
-        mat.rotateY(rotG.y);
-        mat.rotateX(rotG.x);
-        mat.scale(new Vector3f(scaleG.x, scaleG.y, scaleG.z));
-        
-        children.forEach((t) -> {
-            if(t instanceof Entity){
-                ((Entity) t).updateMatrix();
-            }
-        });
+        getMat().identity();
+        getMat().translate(getPosG());
+        getMat().rotateLocalZ(getRotG().z);
+        getMat().rotateY(getRotG().y);
+        getMat().rotateX(getRotG().x);
+        getMat().scale(new Vector3f(getScaleG().x, getScaleG().y, getScaleG().z));
     }
     
     final public static float[] planePosCoordsXP = 

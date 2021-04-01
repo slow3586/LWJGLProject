@@ -1,4 +1,4 @@
-package lwjglproject.entities.primitives;
+package lwjglproject.entities.prim3d;
 
 import lwjglproject.entities.Entity;
 import org.joml.*;
@@ -15,27 +15,27 @@ public class Box extends Entity {
         super(parent);
         
         l = Plane.planeXP(this);
-        l.posL = new Vector3f(0.5f,-0.5f,-0.5f);
+        l.setPosL(new Vector3f(0.5f,-0.5f,-0.5f));
         l.updateMatrix();
         
         r = Plane.planeXN(this);
-        r.posL = new Vector3f(-0.5f,-0.5f,-0.5f);
+        r.setPosL(new Vector3f(-0.5f,-0.5f,-0.5f));
         r.updateMatrix();
         
         b = Plane.planeYP(this);
-        b.posL = new Vector3f(-0.5f,0.5f,-0.5f);
+        b.setPosL(new Vector3f(-0.5f,0.5f,-0.5f));
         b.updateMatrix();
         
         f = Plane.planeYN(this);
-        f.posL = new Vector3f(-0.5f,-0.5f,-0.5f);
+        f.setPosL(new Vector3f(-0.5f,-0.5f,-0.5f));
         f.updateMatrix();
         
         u = Plane.planeZP(this);
-        u.posL = new Vector3f(-0.5f,-0.5f,0.5f);
+        u.setPosL(new Vector3f(-0.5f,-0.5f,0.5f));
         u.updateMatrix();
         
         d = Plane.planeZN(this);
-        d.posL = new Vector3f(-0.5f,-0.5f,-0.5f);
+        d.setPosL(new Vector3f(-0.5f,-0.5f,-0.5f));
         d.updateMatrix();
         
         

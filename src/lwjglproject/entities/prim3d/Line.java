@@ -1,4 +1,4 @@
-package lwjglproject.entities.primitives;
+package lwjglproject.entities.prim3d;
 
 import lwjglproject.entities.*;
 import lwjglproject.gl.materials.MaterialSolidColor;
@@ -28,7 +28,7 @@ public class Line extends Mesh {
     private Vector3f size = new Vector3f(0,0,0);
     
     public void setLine(Vector3f start, Vector3f end){
-        posL = start;
+        setPosL(start);
         setSize(new Vector3f(end).sub(start));
     }
     
@@ -41,8 +41,8 @@ public class Line extends Mesh {
                 y = (float) java.lang.Math.toRadians(-90);
         }
         float z = new Vector2f(1,0).angle(new Vector2f(s.x,s.y));
-        rotL = new Vector3f(0,-y,z);
-        scaleL = new Vector3f(s.length(),getWidth(),1);
+        setRotL(new Vector3f(0,-y,z));
+        setScaleL(new Vector3f(s.length(),getWidth(),1));
         size = s;
     }
     
@@ -55,25 +55,25 @@ public class Line extends Mesh {
     }
     
     public float getWidth(){
-        return scaleL.y;
+        return getScaleL().y;
     }
     
     @Override
     public void updateMatrix() {
         updateVectors();
         
-        mat.identity();
+        getMat().identity();
         
-        Vector3f newPos = (Vector3f) new Vector3f(posG).rotateZ(-rotG.z).rotateY(-rotG.y);
-        mat.rotateLocalZ(rotG.z);
-        mat.rotateY(rotG.y);
-        mat.translate(newPos);
+        Vector3f newPos = (Vector3f) new Vector3f(getPosG()).rotateZ(-rotG.z).rotateY(-rotG.y);
+        getMat().rotateLocalZ(getRotG().z);
+        getMat().rotateY(getRotG().y);
+        getMat().translate(newPos);
         
         if(turnTowardsCamera){
-            Vector3f lineCenter = new Vector3f(posG).add(new Vector3f(size).div(2));
+            Vector3f lineCenter = new Vector3f(getPosG()).add(new Vector3f(size).div(2));
             //Vector3f cameraPos = new Vector3f(Camera.main.posG);
             Vector3f dir =  new Vector3f(cameraPos).sub(lineCenter);
-            Vector3f plane = new Vector3f(1,0,1).rotateZ(rotG.z).rotateY(rotG.y);
+            Vector3f plane = new Vector3f(1,0,1).rotateZ(getRotG().z).rotateY(getRotG().y);
 
             if(plane.x == 0 && plane.y ==0)
                 plane = new Vector3f(1,0,1);
@@ -82,14 +82,14 @@ public class Line extends Mesh {
             else if(plane.y == 0 && plane.z ==0)
                 plane = new Vector3f(1,1,0);
 
-            Vector3f up = (Vector3f) new Vector3f(0,0,1).rotateZ(rotG.z).rotateY(rotG.y);
+            Vector3f up = (Vector3f) new Vector3f(0,0,1).rotateZ(getRotG().z).rotateY(getRotG().y);
             float angleX = up.angleSigned(dir, plane);
 
             
-            mat.rotateX(angleX);
+            getMat().rotateX(angleX);
         }
         
-        mat.scale(scaleG);
+        getMat().scale(getScaleG());
     }
     
     final public static VertexArrayPTNI lineVertexArray = new VertexArrayPTNI(

@@ -40,7 +40,7 @@ public class Camera extends Entity{
     
     public static Camera cam2D(){
         Camera c = new Camera();
-        c.posL = new Vector3f(0,0,100);
+        c.setPosL(new Vector3f(0,0,100));
         c.up = new Vector3f(up2D);
         c.down = new Vector3f(down2D);
         c.left = new Vector3f(left2D);
@@ -53,7 +53,7 @@ public class Camera extends Entity{
     
     public static Camera cam2DFlipped(){
         Camera c = Camera.cam2D();
-        c.posL = new Vector3f(0,0,-100);
+        c.setPosL(new Vector3f(0,0,-100));
         c.up.negate();
         c.down.negate();
         c.forward.negate();
@@ -78,48 +78,48 @@ public class Camera extends Entity{
     public void updateMatrix() {
         updateVectors();
         
-        mat.identity();
-        mat.mul(proj);
-        mat.mul(view);
+        getMat().identity();
+        getMat().mul(proj);
+        getMat().mul(view);
         
-        fi.set(mat, false);
+        fi.set(getMat(), false);
     }
     
     public void look(){
         Vector3f f = new Vector3f(forward);
-        f.rotateZ(rotL.z);
-        f.rotateY(rotL.y);
-        f.rotateX(rotL.x);
+        f.rotateZ(getRotL().z);
+        f.rotateY(getRotL().y);
+        f.rotateX(getRotL().x);
         
         lookAlong(f);
     }
     
     public void lookAt(Vector3f dir){
-        lookAt(posL, dir);
+        lookAt(getPosL(), dir);
     }
     
     public void lookAlong(Vector3f dir){
-        lookAlong(posL, dir);
+        lookAlong(getPosL(), dir);
     }
     
     public void lookAt(Vector3f pos, Vector3f dir){
-        posL = pos;
+        setPosL(pos);
         view.identity();
-        view.lookAt(posL, dir, up);
+        view.lookAt(getPosL(), dir, up);
         updateMatrix();
     }
     
     public void lookAlong(Vector3f pos, Vector3f dir){
-        posL = pos;
+        setPosL(pos);
         view.identity();
-        view.lookAt(posL, new Vector3f(posL).add(dir), up);
+        view.lookAt(getPosL(), new Vector3f(getPosL()).add(dir), up);
         updateMatrix();
     }
     
     public RayAabIntersection mouseRay(){
         Vector3f o = new Vector3f();
         Vector3f d = new Vector3f();
-        mat.unprojectRay(Mouse.pos.x, App.h - Mouse.pos.y, new int[]{0, 0, App.w, App.h}, o, d);
+        getMat().unprojectRay(Mouse.pos.x, App.h - Mouse.pos.y, new int[]{0, 0, App.w, App.h}, o, d);
         return new RayAabIntersection(o.x, o.y, o.z, d.x, d.y, d.z);
     }
     

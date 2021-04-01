@@ -20,7 +20,7 @@ public class FullscreenImage extends Panel {
     public void draw(Camera cam) {
         if(!visible) return;
         if(texture!=null){
-            SPTexture.draw(cam.mat, mat, texture, panelVA);
+            SPTexture.draw(cam.getMat(), mat, texture, panelVA);
             //SPSolidColor.draw(Gui.cam.mat, mat, new Vector4f(1,0,0,1), panelVA);
         }
     }

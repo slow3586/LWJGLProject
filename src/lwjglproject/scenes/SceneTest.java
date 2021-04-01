@@ -6,12 +6,12 @@ import lwjglproject.Keyboard;
 import lwjglproject.Mouse;
 import lwjglproject.TextToTexture;
 import lwjglproject.entities.Camera;
-import lwjglproject.entities.LineGen;
+import lwjglproject.entities.prim2d.Line2D;
 import lwjglproject.entities.gui.Gui;
 import lwjglproject.entities.gui.Label;
-import lwjglproject.entities.primitives.Box;
+import lwjglproject.entities.prim3d.Box;
 import lwjglproject.scenes.Scene;
-import lwjglproject.entities.primitives.Plane;
+import lwjglproject.entities.prim3d.Plane;
 import lwjglproject.gl.Texture;
 import lwjglproject.gl.materials.MaterialTexture;
 import org.joml.*;
@@ -29,19 +29,20 @@ public class SceneTest extends Scene {
     @Override
     public void start() {
         
-        LineGen lg = new LineGen(Gui.ins);
-        lg.points.add(new LineGen.LinePoint(new Vector2f(50,-50), 10f, new Vector4f(1,0,0,1)));
+        Line2D lg = new Line2D(Gui.ins);
+        lg.points.add(new Line2D.LinePoint(new Vector2f(50,-50), 10f, new Vector4f(1,0,0,1)));
         //lg.points.add(new LineGen.LinePoint(new Vector2f(50,-50), 10f, new Vector4f(1,0,0,1)));
-        lg.points.add(new LineGen.LinePoint(new Vector2f(200,-50), 10f, new Vector4f(1,0,0,1)));
-        lg.points.add(new LineGen.LinePoint(new Vector2f(200,-200), 10f, new Vector4f(1,0,0,1)));
-        lg.points.add(new LineGen.LinePoint(new Vector2f(50,-200), 10f, new Vector4f(1,0,0,1)));
+        lg.points.add(new Line2D.LinePoint(new Vector2f(200,-50), 10f, new Vector4f(1,0,0,1)));
+        lg.points.add(new Line2D.LinePoint(new Vector2f(200,-200), 10f, new Vector4f(1,0,0,1)));
+        lg.points.add(new Line2D.LinePoint(new Vector2f(50,-200), 10f, new Vector4f(1,0,0,1)));
         //lg.points.add(new LineGen.LinePoint(new Vector2f(50,-50), 10f, new Vector4f(1,0,0,1)));
         lg.loops=true;
         lg.needsRender = true;
         
         b = new Box(root);
-        b.scaleL = new Vector3f(10,10,10);
-        b.updateMatrix();
+        b.setScaleL(new Vector3f(10,10,10));
+        b.name = "BOX";
+        //b.updateMatrix();
         l = new Label(null, "hi", TextToTexture.def);
         l.posL = new Vector2i(100,100);
         l.updateMatrix();
@@ -54,7 +55,7 @@ public class SceneTest extends Scene {
         });
         
         Gui.ins.reshape();
-        root.camera.posL= new Vector3f(0,-10,0);
+        root.camera.setPosL(new Vector3f(0,-10,0));
     }
 
     @Override
@@ -80,13 +81,12 @@ public class SceneTest extends Scene {
         }
         if(Mouse.moved){
             //Camera.main.rotL.x+=Mouse.rel.y*0.01f;
-            root.camera.rotL.z+=Mouse.rel.x*App.delta;
+            root.camera.setRotL(root.camera.getRotL().add(0, 0, Mouse.rel.x*App.delta));
         }
-        b.rotL.z+=0.01f;
-        b.updateMatrix();
+        b.setRotL(b.getRotL().add(0, 0, 0.01f));
         movement.mul(10);
         movement.mul(App.delta);
-        root.posL.add(movement);
+        root.camera.getPosL().add(movement);
         l.setText(String.valueOf(App.fps));
         
         root.camera.look();

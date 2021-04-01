@@ -101,7 +101,7 @@ public class Panel extends Node {
                 posG = new Vector2i(posL).add(((Panel)parent).posG);
             else{
                 Entity p = (Entity)parent;
-                posG = new Vector2i(posL).add(new Vector2i((int)p.posG.x, (int)p.posG.y));
+                posG = new Vector2i(posL).add(new Vector2i((int)p.getPosG().x, (int)p.getPosG().y));
             }
         } else {
             posG = posL;
@@ -117,9 +117,5 @@ public class Panel extends Node {
         mat.identity();
         mat.translate(posG.x, -posG.y, 0);
         mat.scale(size.x, -size.y, 1);
-        
-        children.forEach((t) -> {
-            ((Panel) t).updateMatrix();
-        });
     }
 }

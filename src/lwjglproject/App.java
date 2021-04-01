@@ -138,6 +138,7 @@ public class App {
         
         Gui.ins.update();
         Scene.getCurrent().update();
+        Scene.getCurrent().root.update();
         //glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
         Scene.getCurrent().root.draw();

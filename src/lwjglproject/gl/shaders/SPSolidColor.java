@@ -30,7 +30,7 @@ final public class SPSolidColor extends ShaderProgram {
 
     public void draw(Camera cam, Entity ent, VertexArray varr, Material mat){
         MaterialSolidColor m = (MaterialSolidColor)mat;
-        draw(cam.mat, ent.mat, m.color, varr);
+        draw(cam.getMat(), ent.getMat(), m.color, varr);
     }
     
     public static void draw(Matrix4f camMat, Matrix4f entMat, Vector4f color, VertexArray varr) {
