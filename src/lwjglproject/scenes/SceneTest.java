@@ -9,6 +9,7 @@ import lwjglproject.entities.Camera;
 import lwjglproject.entities.prim2d.Line2D;
 import lwjglproject.entities.gui.Gui;
 import lwjglproject.entities.gui.Label;
+import lwjglproject.entities.gui.PanelRect;
 import lwjglproject.entities.prim3d.Box;
 import lwjglproject.scenes.Scene;
 import lwjglproject.entities.prim3d.Plane;
@@ -29,23 +30,29 @@ public class SceneTest extends Scene {
     @Override
     public void start() {
         
-        Line2D lg = new Line2D(Gui.ins);
-        lg.points.add(new Line2D.LinePoint(new Vector2f(50,-50), 10f, new Vector4f(1,0,0,1)));
-        //lg.points.add(new LineGen.LinePoint(new Vector2f(50,-50), 10f, new Vector4f(1,0,0,1)));
-        lg.points.add(new Line2D.LinePoint(new Vector2f(200,-50), 10f, new Vector4f(1,0,0,1)));
-        lg.points.add(new Line2D.LinePoint(new Vector2f(200,-200), 10f, new Vector4f(1,0,0,1)));
-        lg.points.add(new Line2D.LinePoint(new Vector2f(50,-200), 10f, new Vector4f(1,0,0,1)));
-        //lg.points.add(new LineGen.LinePoint(new Vector2f(50,-50), 10f, new Vector4f(1,0,0,1)));
-        lg.loops=true;
-        lg.needsRender = true;
+        for (int i = 0; i < 1000; i++) {
+            PanelRect pr = new PanelRect(null);
+            pr.setPosL(new Vector2i(i,i));
+            pr.setSize(new Vector2i(10,10));
+            /*
+            Line2D lg = new Line2D(Gui.ins);
+            lg.points.add(new Line2D.LinePoint(new Vector2f(i+50,-50), 10f, new Vector4f(1,0,0,1)));
+            //lg.points.add(new LineGen.LinePoint(new Vector2f(50,-50), 10f, new Vector4f(1,0,0,1)));
+            lg.points.add(new Line2D.LinePoint(new Vector2f(i+200,-50), 10f, new Vector4f(1,0,0,1)));
+            lg.points.add(new Line2D.LinePoint(new Vector2f(i+200,-200), 10f, new Vector4f(1,0,0,1)));
+            lg.points.add(new Line2D.LinePoint(new Vector2f(i+50,-200), 10f, new Vector4f(1,0,0,1)));
+            //lg.points.add(new LineGen.LinePoint(new Vector2f(50,-50), 10f, new Vector4f(1,0,0,1)));
+            lg.loops=true;
+            lg.needsRender = true;
+            */
+        }
         
         b = new Box(root);
         b.setScaleL(new Vector3f(10,10,10));
         b.name = "BOX";
-        //b.updateMatrix();
         l = new Label(null, "hi", TextToTexture.def);
-        l.posL = new Vector2i(100,100);
-        l.updateMatrix();
+        l.name = "LABEL";
+        l.setPosL(new Vector2i(100,100));
         
         t = Texture.fromFile(new File("img.png"));
         MaterialTexture m = new MaterialTexture(t);
@@ -54,7 +61,6 @@ public class SceneTest extends Scene {
             t.setMaterial(m);
         });
         
-        Gui.ins.reshape();
         root.camera.setPosL(new Vector3f(0,-10,0));
     }
 

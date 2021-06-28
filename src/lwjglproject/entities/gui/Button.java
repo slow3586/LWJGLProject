@@ -31,9 +31,7 @@ public abstract class Button extends Panel {
             //Mouse.consumed.add(Mouse.LEFT);
         }
         
-        children.forEach((t) -> {
-            ((Panel) t).update();
-        });
+        updateChildren();
     }
     
     public abstract void onClick();

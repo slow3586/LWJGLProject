@@ -28,7 +28,6 @@ public final class Gui extends World {
         camera.orthoLeftBottom(1);
         
         FullscreenImage.ins.size = new Vector2i(App.w, App.h);
-        FullscreenImage.ins.updateMatrix();
     }
     
 }

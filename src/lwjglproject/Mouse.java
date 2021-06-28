@@ -31,9 +31,9 @@ public class Mouse {
         wheel = 0f;
     }
 
-    public static final Short LEFT = GLFW_MOUSE_BUTTON_LEFT;
-    public static final Short MIDDLE = GLFW_MOUSE_BUTTON_MIDDLE;
-    public static final Short RIGHT = GLFW_MOUSE_BUTTON_RIGHT;
+    public static final Integer LEFT = GLFW_MOUSE_BUTTON_LEFT;
+    public static final Integer MIDDLE = GLFW_MOUSE_BUTTON_MIDDLE;
+    public static final Integer RIGHT = GLFW_MOUSE_BUTTON_RIGHT;
     
     public static boolean isDown(Integer key){
         return down.contains(key);

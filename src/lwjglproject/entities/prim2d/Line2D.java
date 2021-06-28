@@ -1,6 +1,7 @@
 package lwjglproject.entities.prim2d;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import lwjglproject.entities.Camera;
 import lwjglproject.entities.Entity;
 import lwjglproject.gl.materials.Material;
@@ -8,18 +9,14 @@ import lwjglproject.gl.shaders.SPSolidColor;
 import lwjglproject.gl.shaders.SPVertexColor;
 import lwjglproject.gl.vertexarrays.VertexArray;
 import lwjglproject.gl.vertexarrays.VertexArrayPIC;
-import org.joml.Matrix2f;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import org.joml.*;
 
-public class Line2D extends Entity {
-
-    public Line2D(Entity parent) {
-        super(parent);
+final public class Line2D {
+    
+    private Line2D(){
     }
     
-    public static class LinePoint{
+    final public static class LinePoint{
         Vector2f pos;
         Float size;
         Vector4f color;
@@ -31,43 +28,24 @@ public class Line2D extends Entity {
         }
     }
     
-    VertexArrayPIC vertexArray = new VertexArrayPIC();
-    public ArrayList<LinePoint> points = new ArrayList<>();
-    public boolean needsRender = false;
-    public boolean loops = false;
-    
-    @Override
-    public void draw(Camera cam) {
-        if(!visible) return;
-
-        if(needsRender) {
-            render();
-            needsRender = false;
+    public static VertexArrayPIC render(ArrayList<LinePoint> points, boolean loops){
+        Objects.nonNull(points);
+        Objects.nonNull(loops);
+        if(points.size()<2) {
+            throw new IllegalArgumentException("There must be at least 2 points to make a line.");
         }
         
-        SPVertexColor.draw(cam.getMat(), this.getMat(), vertexArray);
-        
-        if(children.isEmpty()) return;
-        
-        children.forEach((t) -> {
-            ((Entity)t).draw(cam);
-        });
-    } 
-    
-    private void render(){
-        if(points.size()<2) return;
-        
-        ArrayList<LinePoint> newPoints = new ArrayList<>(points);
+        VertexArrayPIC vertexArray = new VertexArrayPIC();
         if(loops)
-            newPoints.add(newPoints.get(0));
+            points.add(points.get(0));
         
         ArrayList<Vector2f> verts = new ArrayList<>();
         ArrayList<Vector4f> colors = new ArrayList<>();
         LinePoint prevPoint = null;
-        Matrix2f rotCW = new Matrix2f().rotation((float) Math.toRadians(90));
-        Matrix2f rotCCW = new Matrix2f().rotation((float) Math.toRadians(-90));
-        for (int i = 0; i < newPoints.size(); i++) {
-            LinePoint currPoint = newPoints.get(i);
+        Matrix2f rotCW = new Matrix2f().rotation((float) java.lang.Math.toRadians(90));
+        Matrix2f rotCCW = new Matrix2f().rotation((float) java.lang.Math.toRadians(-90));
+        for (int i = 0; i < points.size(); i++) {
+            LinePoint currPoint = points.get(i);
             if(prevPoint==null){
                 prevPoint = currPoint;
                 continue;
@@ -92,7 +70,7 @@ public class Line2D extends Entity {
             colors.add(prevPoint.color);
             
             Vector2f v1new = new Vector2f(currPoint.pos);
-            if(i==newPoints.size()-1 && !loops){
+            if(i==points.size()-1 && !loops){
                 v1new.sub(new Vector2f(vecDir).mul(currPoint.size));
             }else{
                 v1new.add(new Vector2f(vecDir).mul(currPoint.size));
@@ -112,11 +90,11 @@ public class Line2D extends Entity {
         }        
         vertexArray.setPosBuf(verts, 0);
         
-        int indArraySize = (newPoints.size()*2-3)*6;
+        int indArraySize = (points.size()*2-3)*6;
         if(loops)
             indArraySize +=6;
         int[] indArr = new int[indArraySize];
-        for (int i = 0; i < newPoints.size()*2-3; i++) {
+        for (int i = 0; i < points.size()*2-3; i++) {
             indArr[i*6] = i*2;
             indArr[i*6+1] = i*2+1;
             indArr[i*6+2] = i*2+2;
@@ -125,7 +103,7 @@ public class Line2D extends Entity {
             indArr[i*6+5] = i*2+3;
         }
         if(loops){
-            int i = (newPoints.size()*2-3);
+            int i = (points.size()*2-3);
             indArr[i*6] = i*2;
             indArr[i*6+1] = i*2+1;
             indArr[i*6+2] = 0;
@@ -134,7 +112,8 @@ public class Line2D extends Entity {
             indArr[i*6+5] = 1;
         }
         vertexArray.setIndBuf(indArr);
-        
         vertexArray.setVertexColorBuf(colors);
+        
+        return vertexArray;
     }
 }

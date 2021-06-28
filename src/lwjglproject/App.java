@@ -120,7 +120,7 @@ public class App {
             glCullFace(GL_BACK);
             glFrontFace(GL_CCW); 
             glEnable(GL_DEPTH_TEST);
-            Scene.setScene(SceneTest.ins);
+            Scene.setScene(SceneEditor.ins);
     }
     
     private void reshape(){

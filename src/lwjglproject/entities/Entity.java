@@ -7,14 +7,14 @@ import org.joml.*;
 
 public class Entity extends Node {
     public String name = "Entity";
-    private Vector3f posG = new Vector3f();
-    private Vector3f rotG = new Vector3f();
-    private Vector3f scaleG = new Vector3f(1,1,1);
-    private Vector3f posL = new Vector3f();
-    private Vector3f rotL = new Vector3f();
-    private Vector3f scaleL = new Vector3f(1,1,1);
-    private Matrix4f mat = new Matrix4f();
-    private boolean needsUpdate = false;
+    protected Vector3f posG = new Vector3f();
+    protected Vector3f rotG = new Vector3f();
+    protected Vector3f scaleG = new Vector3f(1,1,1);
+    protected Vector3f posL = new Vector3f();
+    protected Vector3f rotL = new Vector3f();
+    protected Vector3f scaleL = new Vector3f(1,1,1);
+    protected Matrix4f mat = new Matrix4f();
+    protected boolean needsUpdate = false;
 
     public Entity() {
     }
@@ -83,7 +83,7 @@ public class Entity extends Node {
     /**
      *  Updates the PosRotScale matrix, should be called after changing the vectors.
      */
-    public void updateMatrix(){
+    protected void updateMatrix(){
         updateVectors();
         
         getMat().identity();
@@ -92,7 +92,7 @@ public class Entity extends Node {
         getMat().scale(getScaleG());
     }
     
-    public void requestUpdate(){
+    protected void requestUpdate(){
         needsUpdate = true;
         children.forEach((t) -> {
             if(t instanceof Entity){
