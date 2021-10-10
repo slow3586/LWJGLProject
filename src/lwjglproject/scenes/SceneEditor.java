@@ -30,6 +30,7 @@ public class SceneEditor extends Scene {
        int cursorSize = 16;
        PanelRect drawLine;
        
+       
     @Override
     public void start() {
         menuPanel = new PanelRect(null);

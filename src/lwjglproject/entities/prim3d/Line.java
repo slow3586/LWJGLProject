@@ -72,7 +72,7 @@ public class Line extends Mesh {
         if(turnTowardsCamera){
             Vector3f lineCenter = new Vector3f(getPosG()).add(new Vector3f(size).div(2));
             //Vector3f cameraPos = new Vector3f(Camera.main.posG);
-            Vector3f dir =  new Vector3f(cameraPos).sub(lineCenter);
+            Vector3f dir =  new Vector3f().sub(lineCenter);
             Vector3f plane = new Vector3f(1,0,1).rotateZ(getRotG().z).rotateY(getRotG().y);
 
             if(plane.x == 0 && plane.y ==0)

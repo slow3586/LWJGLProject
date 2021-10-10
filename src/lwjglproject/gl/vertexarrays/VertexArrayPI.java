@@ -44,7 +44,7 @@ public class VertexArrayPI extends VertexArray {
             Vector3f v = list.get(i);
             posArr[i*3] = v.x;
             posArr[i*3+1] = v.y;
-            posArr[i*3+2] = 0;
+            posArr[i*3+2] = v.z;
         }
         setPosBuf(posArr);
     }
@@ -56,6 +56,14 @@ public class VertexArrayPI extends VertexArray {
         glBufferData(GL_ARRAY_BUFFER, BufHelp.toBuffer(array), GL_STATIC_DRAW);
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+    }
+    
+    public void setIndBuf(ArrayList<Integer> list){
+        int[] posArr = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            posArr[i]= list.get(i);
+        }
+        setIndBuf(posArr);
     }
     
     public void setIndBuf(int[] array){

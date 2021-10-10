@@ -5,4 +5,8 @@ import org.joml.Vector2i;
 
 public class PanelLine extends Panel {
 
+    public PanelLine(Panel parent) {
+        super(parent);
+    }
+
 }

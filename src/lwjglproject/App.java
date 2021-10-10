@@ -14,7 +14,6 @@ import static org.lwjgl.opengl.GL14.*;
 import org.lwjgl.system.MemoryStack;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
-import sun.awt.DisplayChangedListener;
 
 public class App {
     private long window;
@@ -120,7 +119,7 @@ public class App {
             glCullFace(GL_BACK);
             glFrontFace(GL_CCW); 
             glEnable(GL_DEPTH_TEST);
-            Scene.setScene(SceneEditor.ins);
+            Scene.setScene(SceneGame.ins);
     }
     
     private void reshape(){

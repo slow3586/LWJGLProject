@@ -1,6 +1,5 @@
 package lwjglproject.entities;
 
-import com.sun.istack.internal.NotNull;
 import java.util.Objects;
 
 public class World extends Entity{
